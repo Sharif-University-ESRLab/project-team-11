@@ -8,24 +8,39 @@ import imageio
 import imageio_ffmpeg
 
 import pyautogui
+import threading
+import time
 
 
 
+d_isa = "mamad"
 
-def move_mouse(direction: str):
-    dx = 0
-    dy = 0
+def move_mouse():
 
-    if direction == "Up":
-        dx = -10
-    elif direction == "Down":
-        dx = 10
-    elif direction == "Right":
-        dy = 10
-    elif direction == "Left":
-        dy = -10
+    def move():
+        while True:
+            direction = d_isa
+        
+            dx = 0
+            dy = 0
+            d = 8
+            if direction == "Up":
+                dx = -d
+            elif direction == "Down":
+                dx = d
+            elif direction == "Right":
+                dy = d
+            elif direction == "Left":
+                dy = -d
 
-    pyautogui.moveRel(dy, dx)
+            pyautogui.moveRel(dy, dx)
+
+            print(direction)
+
+            time.sleep(0.001)
+        
+
+    threading.Thread(target=move).start()
     
 
 
@@ -165,6 +180,10 @@ def calc_ratio_ud(img, detector, predictor, temp):
 
 
 def real_time():
+
+    move_mouse()
+
+
     path_to_dataset = "ILFW"
 
     detector = dlib.get_frontal_face_detector()
@@ -207,7 +226,9 @@ def real_time():
         else:
             text = "Front"
 
-        move_mouse(text)
+        global d_isa
+        d_isa = text
+        # move_mouse(text)
         
         cv2.putText(frame, text, (20, 80), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 6)
 
