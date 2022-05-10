@@ -1,0 +1,13 @@
+cycler<=0.10.0
+dlib<=19.21.0
+imageio<=2.8.0
+imageio-ffmpeg<=0.4.3
+kiwisolver<=1.0.1
+matplotlib<=3.0.3
+numpy<=1.18.4
+Pillow<=6.0.0
+pyparsing<=3.0.7
+python-dateutil<=2.8.0
+scipy<=1.2.1
+six<=1.12.0
+
