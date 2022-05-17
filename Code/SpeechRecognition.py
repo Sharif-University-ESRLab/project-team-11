@@ -27,12 +27,39 @@
 # # ...
 # # print(r.recognize_google())
 import speech_recognition as sr
+import json,pyaudio,wave,os
+from urllib.request import urlopen,Request
+
+import pyautogui
 
 r = sr.Recognizer()
 source = sr.Microphone()
 speech_recognition = False
 mouse = False
 keyboard = False
+
+class RecognizerClass:
+    def sendRequest(fileContent):
+        GOOGLEAPIKEY = "INSERT GOOGLE API KEY HERE :)"
+        APIURL = 'https://www.google.com/speech-api/v2/recognize?xierr=1&client=chromium&lang=fa-IR&key=' + GOOGLEAPIKEY
+        headerParameters = {'Content-Type': 'audio/x-flac; rate=12000'}
+        # fileContent = open(audioFile, 'rb')
+        fileData = fileContent.read()
+        requestParam = Request(APIURL, data=fileData, headers=headerParameters)
+        response = urlopen(requestParam)
+        responseByte = response.read()
+        responseString = responseByte.decode("utf-8")
+        if len(responseString) > 16:
+            responseString = responseString.split('\n', 1)[1]
+            a = json.loads(responseString)['result'][0]
+            transcript = ""
+            confidence = 0
+            if 'confidence' in a['alternative'][0]:
+                confidence = a['alternative'][0]['confidence']
+                confidence = confidence * 100
+            if 'transcript' in a['alternative'][0]:
+                transcript = a['alternative'][0]['transcript']
+                return transcript
 
 
 def interpret_text(text):
@@ -45,11 +72,11 @@ def interpret_text(text):
         return
 
     if "right-click" in text:
-        pass
+        pyautogui.click(button='right')
     if "left-click" in text:
-        pass
+        pyautogui.click()
     if "double click" in text:
-        pass
+        pyautogui.click(clicks=2)
     if "start keyboard" in text:
         pass
     if "exit keyboard" in text:
@@ -59,9 +86,9 @@ def interpret_text(text):
     if "exit mouse" in text:
         pass
     if "restart" in text:
-        pass
+        os.system("shutdown /r")
     if "shut down" in text:
-        pass
+        os.system("shutdown /s")  # shutdown
 
 
 def callback(recognizer, audio):  # this is called from the background thread
@@ -69,8 +96,9 @@ def callback(recognizer, audio):  # this is called from the background thread
         print('------------------')
         print('The audio has been received.')
         print('Start processing:')
-        text = recognizer.recognize_google(audio)
-        text = text.lower()
+        # text = recognizer.recognize_google(audio)
+        # text = text.lower()
+        text = RecognizerClass.sendRequest(audio)
         print(text)
         print('------------------')
 
