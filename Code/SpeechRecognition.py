@@ -1,31 +1,4 @@
-# import time
-# import speech_recognition as sr
-#
-# r = sr.Recognizer()
-#
-# with sr.Microphone() as source:
-#     # read the audio data from the default microphone
-#     while True:
-#         print('start')
-#         audio_data = r.record(source, duration=2)
-#         print('finish')
-#         print("Recognizing...")
-#     # convert speech to text
-#     try:
-#         text = r.recognize_google(audio_data)
-#         print(text)
-#     except:
-#         print('project tamoom shod')
-# # harvard = sr.AudioFile('mohammad.wav')
-# # with harvard as source:
-# #     audio = r.record(source)
-# #     print('sa lam')
-# #     t1 = time.time()
-# #     print(r.recognize_google(audio))
-# #     print(time.time() - t1)
-# #     print('khodafez')
-# # ...
-# # print(r.recognize_google())
+import logging
 import speech_recognition as sr
 import json,pyaudio,wave,os
 from urllib.request import urlopen,Request
@@ -61,34 +34,55 @@ class RecognizerClass:
                 transcript = a['alternative'][0]['transcript']
                 return transcript
 
-
-def interpret_text(text):
+def check_for_speech_recognition_enabling(text):
     global speech_recognition
-    if "activate speech recognition" in text:
+    if "صدا روشن" in text:
         speech_recognition = True
-    if "deactivate speech recognition" in text:
+        logging.info("speech recognition is activated")
+    if "صدا خاموش" in text:
         speech_recognition = False
-    if not speech_recognition:
-        return
+        logging.info("speech recognition is deactivated")
 
-    if "right-click" in text:
+
+def check_for_speech_commands(text):
+    if "کلیک راست" in text:
+        logging.info("right click")
         pyautogui.click(button='right')
-    if "left-click" in text:
+
+    if "کلیک چپ" in text:
+        logging.info("left click")
         pyautogui.click()
-    if "double click" in text:
+
+    if "کلیک جفت" in text:
+        logging.info("double click")
         pyautogui.click(clicks=2)
-    if "start keyboard" in text:
-        pass
-    if "exit keyboard" in text:
-        pass
+
     if "start mouse" in text:
         pass
     if "exit mouse" in text:
         pass
+
+
+def check_for_system_commands(text):
     if "restart" in text:
         os.system("shutdown /r")
     if "shut down" in text:
         os.system("shutdown /s")  # shutdown
+
+
+def check_for_keyboard_commands(text):
+    if "start keyboard" in text:
+        pass
+    if "exit keyboard" in text:
+        pass
+
+
+def interpret_text(text):
+    check_for_speech_recognition_enabling(text)
+
+    if not speech_recognition:
+        return
+    check_for_speech_commands(text)
 
 
 def callback(recognizer, audio):  # this is called from the background thread
@@ -96,9 +90,9 @@ def callback(recognizer, audio):  # this is called from the background thread
         print('------------------')
         print('The audio has been received.')
         print('Start processing:')
-        # text = recognizer.recognize_google(audio)
+        text = recognizer.recognize_google(audio, language='fa')
         # text = text.lower()
-        text = RecognizerClass.sendRequest(audio)
+        # text = RecognizerClass.sendRequest(audio)
         print(text)
         print('------------------')
 
@@ -113,5 +107,7 @@ def start_recognizer():
     while True:
         pass
 
+if __name__ == "__main__":
+    logging.basicConfig(filename='speech.log', level=logging.INFO)
 
 start_recognizer()
