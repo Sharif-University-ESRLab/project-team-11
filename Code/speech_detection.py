@@ -109,5 +109,5 @@ def start_recognizer():
 
 if __name__ == "__main__":
     logging.basicConfig(filename='speech.log', level=logging.INFO)
+    start_recognizer()
 
-start_recognizer()
