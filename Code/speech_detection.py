@@ -7,9 +7,11 @@ import pyautogui
 
 r = sr.Recognizer()
 source = sr.Microphone()
-speech_recognition = False
+# speech_recognition = False
+speech_recognition = True
 mouse = False
-keyboard = False
+# keyboard = False
+keyboard = True
 
 class RecognizerClass:
     def sendRequest(fileContent):
@@ -57,6 +59,9 @@ def check_for_speech_commands(text):
         logging.info("double click")
         pyautogui.click(clicks=2)
 
+    check_for_system_commands(text)
+    check_for_keyboard_commands(text)
+
     if "start mouse" in text:
         pass
     if "exit mouse" in text:
@@ -64,17 +69,26 @@ def check_for_speech_commands(text):
 
 
 def check_for_system_commands(text):
-    if "restart" in text:
-        os.system("shutdown /r")
-    if "shut down" in text:
-        os.system("shutdown /s")  # shutdown
+    if "راه اندازی مجدد" in text:
+        print('dare restart misheeee \n')
+        # os.system("shutdown /r")
+    if "خاموش" in text:
+        print("dare shut down misheeee")
+        # os.system("shutdown /s")  # shutdown
 
 
 def check_for_keyboard_commands(text):
-    if "start keyboard" in text:
-        pass
-    if "exit keyboard" in text:
-        pass
+    global keyboard
+    # if keyboard:
+    #     print(text)
+    #     pyautogui.typewrite('سلام')
+
+    if "کیبورد روشن" in text:
+        keyboard = True
+
+    if "کیبورد خاموش" in text:
+        keyboard = False
+
 
 
 def interpret_text(text):
