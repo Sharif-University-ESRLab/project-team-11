@@ -1,19 +1,17 @@
 import logging
 import speech_recognition as sr
 import json,pyaudio,wave,os
-from urllib.request import urlopen,Request
 from config import Config
-import pyautogui
-import keyboard as kb
+
 
 from message import Message
 
+# Config the Microphone and its sensitivity
 r = sr.Recognizer()
 r.energy_threshold = 3000
-
 source = sr.Microphone()
 
-
+# Check if the given text is activating/deactivating the voice assistant
 def check_for_speech_recognition_enabling(text):
     if "صدا روشن" == text:
         Config.speech_recognition = True
@@ -23,37 +21,42 @@ def check_for_speech_recognition_enabling(text):
         logging.info("speech recognition is deactivated")
 
 
+# Interpret the given text
 def check_for_speech_commands(text):
+    #  Right Click
     if "کلیک راست" == text:
         logging.info("right click")
         msg = Message()
         msg.type = 'right click'
         Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))
 
-        # pyautogui.click(button='right')
-
+    # Left Click
     if "کلیک چپ" == text:
         logging.info("left click")
         msg = Message()
         msg.type = 'left click'
         Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))
-        # pyautogui.click()
 
+    # Double Click
     if "کلیک جفت" == text:
         logging.info("double click")
         msg = Message()
         msg.type = 'double click'
         Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))
-        # pyautogui.click(clicks=2)
 
+    # Restart / Shutdown
     check_for_system_commands(text)
+
+    # Activating / Deactivating the keyboard
     check_for_keyboard_commands(text)
 
+    # Activating / Deactivating the Mouse
     if "موس روشن" == text:
         Config.mouse = True
     if "موس خاموش" == text:
         Config.mouse = False
 
+    # Activating / Deactivating the blink detector
     if "چشمک روشن" == text:
         Config.blink = True
     if "چشمک خاموش" == text:
@@ -66,13 +69,13 @@ def check_for_system_commands(text):
         msg = Message()
         msg.type = 'restart'
         Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))
-        # os.system("shutdown /r")
+
     if "خاموش" == text:
         print("dare shut down misheeee")
         msg = Message()
         msg.type = 'shut down'
         Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))
-        # os.system("shutdown /s")  # shutdown
+
 
 def check_for_keyboard_commands(text):
     if "کیبورد خاموش" ==  text:
@@ -88,6 +91,8 @@ def check_for_keyboard_commands(text):
     if "کیبورد روشن" == text:
         Config.keyboard = True
 
+# This Function checks if the given text is activating the voice assistant
+# If the voice assistant is enabled, then the given text will be interpreted
 def interpret_text(text):
     check_for_speech_recognition_enabling(text)
 
@@ -96,7 +101,9 @@ def interpret_text(text):
     check_for_speech_commands(text)
 
 
-def callback(recognizer, audio):  # this is called from the background thread
+# Whenever a user speaks, the listener recognizes the audio, and gives it to this function
+# This function is called from the background thread
+def callback(recognizer, audio):
     try:
         print('------------------')
         print('The audio has been received.')
@@ -112,10 +119,14 @@ def callback(recognizer, audio):  # this is called from the background thread
 
 
 def start_recognizer():
+    # Initialize a listener which activates when a user speaks
     r.listen_in_background(source, callback)
+
+    # The program should be continued for ever
     while True:
         pass
 
+# Start Speech Recognition
 def main():
     logging.basicConfig(filename='speech.log', level=logging.INFO)
     start_recognizer()

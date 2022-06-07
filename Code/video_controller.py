@@ -47,6 +47,7 @@ def move_mouse():
         time.sleep(0.1)
         # time.sleep(1)
 
+# According to the eyes, the user is controlling the clicks (left / right / double)
 def interpret_blink(blink_found):
     if not Config.blink:
         return
@@ -74,6 +75,7 @@ def main():
 
     threading.Thread(target=move_mouse).start()
 
+    # Initialize the video
     cv2.namedWindow('controller')
     cap = cv2.VideoCapture(0)
     while True:
@@ -82,12 +84,13 @@ def main():
             break
         cv2.imshow('controller', frame)
 
-        blink_found = check_frame_for_blink(frame)
-        # face_direction = get_frame_direction(frame)
+        # If the user is controlling the mouse with his head, then find the orientation of the head
+        if Config.mouse:
+            face_direction = get_frame_direction(frame)
 
-
+        # If user is controlling clicks with his eyes, then check if he is blinking
         if Config.blink and time.time() - last_blink > blink_th:
-
+            blink_found = check_frame_for_blink(frame)
             if any(blink_found):
                 last_blink = time.time()
                 interpret_blink(blink_found)
