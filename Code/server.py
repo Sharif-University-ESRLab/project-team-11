@@ -21,10 +21,10 @@ def handle_menu():
     print("HI")
     sg.theme('Black')  # Add a touch of color
     # All the stuff inside your window.
-    layout = [[sg.Button('Enable Voice Assistant', size=(10, 2)),
-               sg.Button('Disable Voice Assistant', size=(10, 2)),
-               sg.Button('Enable Face Mouse', size=(10, 2)),
-               sg.Button('Disable Face Mouse', size=(10, 2))]]
+    layout = [[sg.Button('Voice', size=(7, 1)),
+               sg.Button('Blink', size=(7, 1)),
+               sg.Button('Mouse', size=(7, 1)),
+               sg.Button('Keyboard', size=(7, 1))]]
 
     # Create the Window
     window = sg.Window('Tool Bar', layout, grab_anywhere=True)
@@ -35,14 +35,14 @@ def handle_menu():
         msg = Message()
         if event == sg.WIN_CLOSED:  # if user closes window
             break
-        elif event == 'Enable Face Mouse':
-            msg.type = 'Enable Face Mouse'
-        elif event == 'Disable Face Mouse':
-            msg.type = 'Disable Face Mouse'
-        elif event == 'Enable Voice Assistant':
-            msg.type = 'Enable Voice Assistant'
-        elif event == 'Disable Voice Assistant':
-            msg.type = 'Disable Voice Assistant'
+        elif event == 'Voice':
+            msg.type = 'Voice'
+        elif event == 'Blink':
+            msg.type = 'Blink'
+        elif event == 'Mouse':
+            msg.type = 'Mouse'
+        elif event == 'Keyboard':
+            msg.type = 'Keyboard'
 
         client.send(json.dumps(msg.__dict__).encode('utf-8'))
 
