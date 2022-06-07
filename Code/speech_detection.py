@@ -40,6 +40,11 @@ def check_for_speech_commands(text):
     if "موس خاموش" == text:
         Config.mouse = False
 
+    if "چشمک روشن" == text:
+        Config.blink = True
+    if "چشمک خاموش" == text:
+        Config.blink = False
+
 
 def check_for_system_commands(text):
     if "راه اندازی مجدد" == text:

@@ -11,6 +11,9 @@ ESCAPE_KEY_CODE = 27
 
 face_direction = ""
 
+last_blink = 0
+blink_th = 1
+
 def move_mouse():
     while True:
         direction = face_direction
@@ -36,8 +39,21 @@ def move_mouse():
         # time.sleep(0.001)
         time.sleep(1)
 
+def interpret_blink(blink_found):
+    if not Config.blink:
+        return
+    if blink_found[0] and blink_found[1]:
+        pyautogui.click(clicks=2)
+    elif blink_found[1]:
+        pyautogui.click()
+    elif blink_found[0]:
+        pyautogui.click(button='right')
+
 
 def main():
+    global last_blink
+    global blink_th
+    global face_direction
 
     threading.Thread(target=move_mouse).start()
 
@@ -52,8 +68,14 @@ def main():
         blink_found = check_frame_for_blink(frame)
         # direction = get_frame_direction(frame)
 
-        # print(blink_found, direction)
-        # print(blink_found)
+        if Config.blink and time.time() - last_blink > blink_th:
+            print(blink_found)
+
+            if any(blink_found):
+                last_blink = time.time()
+                interpret_blink(blink_found)
+
+        # print(direction)
 
         key = cv2.waitKey(1)
         if key == ESCAPE_KEY_CODE:

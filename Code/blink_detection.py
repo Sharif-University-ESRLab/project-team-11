@@ -56,9 +56,11 @@ def check_face_blink(frame, face):
     right_eye_ratio = get_blink_ratio(right_eye_landmarks, landmarks)
     blink_ratio     = (left_eye_ratio + right_eye_ratio) / 2
 
-    if blink_ratio > BLINK_RATIO_THRESHOLD:
-        return True
-    return False
+    return [left_eye_ratio > BLINK_RATIO_THRESHOLD, right_eye_ratio > BLINK_RATIO_THRESHOLD,
+            blink_ratio > BLINK_RATIO_THRESHOLD]
+    # if blink_ratio > BLINK_RATIO_THRESHOLD:
+    #     return True
+    # return False
 
 
 def check_frame_for_blink(frame):
@@ -68,7 +70,17 @@ def check_frame_for_blink(frame):
                        adjust_threshold = 0.0)
 
     #-----Step 4: Detecting Eyes using landmarks in dlib-----
-    return any(map(lambda face: check_face_blink(frame, face), faces))
+
+    val = [False, False, False]
+    for face in faces:
+        res = check_face_blink(frame, face)
+        for j in range(3):
+            if res[j]:
+                val[j] = True
+    return val
+
+    # print(faces)
+    # return any(map(lambda face: check_face_blink(frame, face), faces))
 
 
 if __name__ == "__main__":
