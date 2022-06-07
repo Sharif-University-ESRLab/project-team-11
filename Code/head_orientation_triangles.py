@@ -8,14 +8,7 @@ import imageio
 import imageio_ffmpeg
 
 
-
-
 d_isa = "mamad"
-
-        
-
-    
-
 
 def preprocess(points):
     pose_estimation.zero_mean(points)
