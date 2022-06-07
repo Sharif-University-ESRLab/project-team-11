@@ -15,7 +15,7 @@ ESCAPE_KEY_CODE = 27
 face_direction = ""
 
 last_blink = 0
-blink_th = 1
+blink_th = 2
 
 def move_mouse():
     while True:
@@ -34,7 +34,7 @@ def move_mouse():
             dy = -d
 
         if Config.mouse:
-            print("salam")
+            # print("salam")
             msg = Message()
             msg.type = 'move mouse'
             msg.move_y = dy
@@ -42,10 +42,10 @@ def move_mouse():
 
             Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))
 
-        # print(direction)
 
-        # time.sleep(0.001)
-        time.sleep(1)
+
+        time.sleep(0.1)
+        # time.sleep(1)
 
 def interpret_blink(blink_found):
     if not Config.blink:
@@ -57,7 +57,7 @@ def interpret_blink(blink_found):
         # pyautogui.click(clicks=2)
     elif blink_found[1]:
         msg = Message()
-        msg.type = 'left clickk'
+        msg.type = 'left click'
         Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))
         # pyautogui.click()
     elif blink_found[0]:
@@ -83,16 +83,14 @@ def main():
         cv2.imshow('controller', frame)
 
         blink_found = check_frame_for_blink(frame)
-        # direction = get_frame_direction(frame)
+        # face_direction = get_frame_direction(frame)
+
 
         if Config.blink and time.time() - last_blink > blink_th:
-            print(blink_found)
 
             if any(blink_found):
                 last_blink = time.time()
                 interpret_blink(blink_found)
-
-        # print(direction)
 
         key = cv2.waitKey(1)
         if key == ESCAPE_KEY_CODE:

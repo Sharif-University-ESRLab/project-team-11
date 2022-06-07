@@ -1,4 +1,4 @@
-    import logging
+import logging
 import speech_recognition as sr
 import json,pyaudio,wave,os
 from urllib.request import urlopen,Request
@@ -9,6 +9,8 @@ import keyboard as kb
 from message import Message
 
 r = sr.Recognizer()
+r.energy_threshold = 3000
+
 source = sr.Microphone()
 
 
