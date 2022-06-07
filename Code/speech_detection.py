@@ -65,13 +65,11 @@ def check_for_speech_commands(text):
 
 def check_for_system_commands(text):
     if "راه اندازی مجدد" == text:
-        print('dare restart misheeee \n')
         msg = Message()
         msg.type = 'restart'
         Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))
 
     if "خاموش" == text:
-        print("dare shut down misheeee")
         msg = Message()
         msg.type = 'shut down'
         Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))

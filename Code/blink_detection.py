@@ -58,9 +58,7 @@ def check_face_blink(frame, face):
 
     return [left_eye_ratio > BLINK_RATIO_THRESHOLD, right_eye_ratio > BLINK_RATIO_THRESHOLD,
             blink_ratio > BLINK_RATIO_THRESHOLD]
-    # if blink_ratio > BLINK_RATIO_THRESHOLD:
-    #     return True
-    # return False
+
 
 
 def check_frame_for_blink(frame):
