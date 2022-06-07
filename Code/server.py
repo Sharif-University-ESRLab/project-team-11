@@ -8,6 +8,7 @@ import keyboard as kb
 from message import Message
 
 
+# Receive bytes from a client
 def read_message(client: socket.socket):
     msg = ""
     while True:
@@ -18,8 +19,9 @@ def read_message(client: socket.socket):
     return msg
 
 
+# Connect to the client and send messages from GUI
 def handle_menu():
-    print("HI")
+    print("Connected To Client")
     sg.theme('Black')  # Add a touch of color
     # All the stuff inside your window.
     layout = [[sg.Button('Voice', size=(7, 1)),
@@ -47,6 +49,7 @@ def handle_menu():
 
         client.send(json.dumps(msg.__dict__).encode('utf-8'))
 
+# Receive a message
 
 def read():
     while True:
@@ -65,21 +68,19 @@ def read():
         elif msg.type == 'double click':
             pyautogui.click(clicks=2)
         elif msg.type == 'shut down':
-            os.system("shutdown /s")
+            print("Shutdown instruction is called")
+            # os.system("shutdown /s")
         elif msg.type == 'restart':
-            os.system("shutdown /r")
+            print("restart instruction is called")
+            # os.system("shutdown /r")
         elif msg.type == 'keyboard':
             kb.write(msg.typed_text)
 
-        # except:
-        # print("error has occured")
-        # client.close()
-        # break
-
-
+# Specify the connection settings
 host = '127.0.0.1'
 port = 8550
 
+# Connect to a client
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind((host, port))
 server.listen(1)
@@ -87,8 +88,10 @@ server.listen(1)
 client, address = server.accept()
 print(f"connected with{address}")
 
+# Read messages from the client
 thread = threading.Thread(target=read)
 thread.start()
 
+# Start GUI
 menu_thread = threading.Thread(target=handle_menu)
 menu_thread.start()

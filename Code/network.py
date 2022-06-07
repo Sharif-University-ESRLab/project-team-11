@@ -4,6 +4,7 @@ from message import Message
 from config import Config
 
 
+# Receive bytes from a server
 def read_message(client: socket.socket):
     msg = ""
     while True:
@@ -14,6 +15,7 @@ def read_message(client: socket.socket):
     return msg
 
 
+# Receive a message from a server
 def read():
     while True:
         # try:
@@ -32,9 +34,11 @@ def read():
 
 
 def main():
+    # Specify the connection config
     host = '127.0.0.1'
     port = 8550
 
+    # Create a socket, and connect to server
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client.connect((host, port))
 

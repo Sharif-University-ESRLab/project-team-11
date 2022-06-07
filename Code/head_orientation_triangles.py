@@ -3,9 +3,6 @@ import dlib
 import numpy as np
 import pose_estimation
 from scipy.spatial import Delaunay
-from matplotlib import pyplot as plt
-import imageio
-import imageio_ffmpeg
 
 
 d_isa = "mamad"

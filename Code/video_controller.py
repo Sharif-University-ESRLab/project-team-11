@@ -17,6 +17,7 @@ face_direction = ""
 last_blink = 0
 blink_th = 2
 
+# Update the coordination of the mouse with respect to the current orientation of the user's face
 def move_mouse():
     while True:
         direction = face_direction
@@ -29,12 +30,11 @@ def move_mouse():
         elif direction == "Down":
             dx = d
         elif direction == "Right":
-            dy = d
-        elif direction == "Left":
             dy = -d
+        elif direction == "Left":
+            dy = +d
 
         if Config.mouse:
-            # print("salam")
             msg = Message()
             msg.type = 'move mouse'
             msg.move_y = dy
@@ -43,9 +43,7 @@ def move_mouse():
             Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))
 
 
-
         time.sleep(0.1)
-        # time.sleep(1)
 
 # According to the eyes, the user is controlling the clicks (left / right / double)
 def interpret_blink(blink_found):
@@ -55,17 +53,17 @@ def interpret_blink(blink_found):
         msg = Message()
         msg.type = 'double click'
         Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))
-        # pyautogui.click(clicks=2)
+
     elif blink_found[1]:
         msg = Message()
         msg.type = 'left click'
         Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))
-        # pyautogui.click()
+
     elif blink_found[0]:
         msg = Message()
         msg.type = 'right click'
         Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))
-        # pyautogui.click(button='right')
+
 
 
 def main():
