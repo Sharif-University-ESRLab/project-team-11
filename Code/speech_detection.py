@@ -1,10 +1,12 @@
-import logging
+    import logging
 import speech_recognition as sr
 import json,pyaudio,wave,os
 from urllib.request import urlopen,Request
 from config import Config
 import pyautogui
 import keyboard as kb
+
+from message import Message
 
 r = sr.Recognizer()
 source = sr.Microphone()
@@ -22,15 +24,25 @@ def check_for_speech_recognition_enabling(text):
 def check_for_speech_commands(text):
     if "کلیک راست" == text:
         logging.info("right click")
-        pyautogui.click(button='right')
+        msg = Message()
+        msg.type = 'right click'
+        Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))
+
+        # pyautogui.click(button='right')
 
     if "کلیک چپ" == text:
         logging.info("left click")
-        pyautogui.click()
+        msg = Message()
+        msg.type = 'left click'
+        Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))
+        # pyautogui.click()
 
     if "کلیک جفت" == text:
         logging.info("double click")
-        pyautogui.click(clicks=2)
+        msg = Message()
+        msg.type = 'double click'
+        Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))
+        # pyautogui.click(clicks=2)
 
     check_for_system_commands(text)
     check_for_keyboard_commands(text)
@@ -49,9 +61,15 @@ def check_for_speech_commands(text):
 def check_for_system_commands(text):
     if "راه اندازی مجدد" == text:
         print('dare restart misheeee \n')
+        msg = Message()
+        msg.type = 'restart'
+        Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))
         # os.system("shutdown /r")
     if "خاموش" == text:
         print("dare shut down misheeee")
+        msg = Message()
+        msg.type = 'shut down'
+        Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))
         # os.system("shutdown /s")  # shutdown
 
 def check_for_keyboard_commands(text):
@@ -59,7 +77,11 @@ def check_for_keyboard_commands(text):
         Config.keyboard = False
 
     if Config.keyboard:
-        kb.write(text)
+        msg = Message()
+        msg.type = 'keyboard'
+        msg.typed_text = text
+        Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))
+        # kb.write(text)
 
     if "کیبورد روشن" == text:
         Config.keyboard = True

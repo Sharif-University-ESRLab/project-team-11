@@ -7,10 +7,10 @@ class Message:
 
         # if it is a message from server:
         # types are:
-        # Disable Face Mouse
-        # Enable Face Mouse
-        # Disable Voice Assistant
-        # Enable Voice Assistant
+        # Mouse
+        # Voice
+        # Keyboard
+        # Blink
         self.type = type
         self.move_x = move_x
         self.move_y = move_y

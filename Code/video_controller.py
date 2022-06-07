@@ -3,9 +3,12 @@ from blink_detection import check_frame_for_blink
 from head_orientation_triangles import get_frame_direction
 from config import Config
 
+from message import Message
+
 import pyautogui
 import threading
 import time
+import json
 
 ESCAPE_KEY_CODE = 27
 
@@ -32,7 +35,12 @@ def move_mouse():
 
         if Config.mouse:
             print("salam")
-            pyautogui.moveRel(dy, dx)
+            msg = Message()
+            msg.type = 'move mouse'
+            msg.move_y = dy
+            msg.move_x = dx
+
+            Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))
 
         # print(direction)
 
@@ -43,11 +51,20 @@ def interpret_blink(blink_found):
     if not Config.blink:
         return
     if blink_found[0] and blink_found[1]:
-        pyautogui.click(clicks=2)
+        msg = Message()
+        msg.type = 'double click'
+        Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))
+        # pyautogui.click(clicks=2)
     elif blink_found[1]:
-        pyautogui.click()
+        msg = Message()
+        msg.type = 'left clickk'
+        Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))
+        # pyautogui.click()
     elif blink_found[0]:
-        pyautogui.click(button='right')
+        msg = Message()
+        msg.type = 'right click'
+        Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))
+        # pyautogui.click(button='right')
 
 
 def main():

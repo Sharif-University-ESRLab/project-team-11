@@ -3,6 +3,7 @@ import json
 import pyautogui
 import os
 import PySimpleGUI as sg
+import keyboard as kb
 
 from message import Message
 
@@ -47,8 +48,6 @@ def handle_menu():
         client.send(json.dumps(msg.__dict__).encode('utf-8'))
 
 
-
-
 def read():
     while True:
         # try:
@@ -70,8 +69,7 @@ def read():
         elif msg.type == 'restart':
             os.system("shutdown /r")
         elif msg.type == 'keyboard':
-            # todo
-            pass
+            kb.write(msg.typed_text)
 
         # except:
         # print("error has occured")
