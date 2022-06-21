@@ -8,7 +8,7 @@ from message import Message
 
 # Config the Microphone and its sensitivity
 r = sr.Recognizer()
-r.energy_threshold = 3000
+r.energy_threshold = 1000
 source = sr.Microphone()
 
 def get_similarity(a, b):
