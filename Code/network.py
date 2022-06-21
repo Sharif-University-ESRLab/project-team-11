@@ -3,6 +3,13 @@ import json
 from message import Message
 from config import Config
 
+#send a message to server in order to show some config is changed
+def announce_config_change(changed_config, is_on):
+    print('from announce:', changed_config, is_on)
+    msg = Message()
+    msg.type = changed_config
+    msg.is_on = is_on
+    Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))
 
 # Receive bytes from a server
 def read_message(client: socket.socket):
@@ -25,17 +32,21 @@ def read():
 
         if msg.type == 'Mouse':
             Config.mouse = not Config.mouse
+            announce_config_change("change mouse", Config.mouse)
         elif msg.type == 'Keyboard':
             Config.keyboard = not Config.keyboard
+            announce_config_change("change keyboard", Config.keyboard)
         elif msg.type == 'Blink':
             Config.blink = not Config.blink
+            announce_config_change("change blink", Config.blink)
         elif msg.type == 'Voice':
             Config.speech_recognition = not Config.speech_recognition
+            announce_config_change("change voice", Config.speech_recognition)
 
 
 def main():
     # Specify the connection config
-    host = '172.20.10.7'
+    host = '192.168.9.109'
     port = 8550
 
     print("The client is searching ...")

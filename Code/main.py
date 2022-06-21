@@ -11,4 +11,4 @@ threading.Thread(target=speech_main).start()
 # threading.Thread(target=video_main).start()
 
 # Start Connecting to server
-# threading.Thread(target=network_main).start()
+threading.Thread(target=network_main).start()

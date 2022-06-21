@@ -1,8 +1,7 @@
 import logging
 import speech_recognition as sr
-import json,pyaudio,wave,os
+import json, pyaudio, wave, os
 from config import Config
-
 
 from message import Message
 
@@ -11,11 +10,20 @@ r = sr.Recognizer()
 r.energy_threshold = 1000
 source = sr.Microphone()
 
+
+# send a message to server in order to show some config is changed
+def announce_config_change(changed_config, is_on):
+    msg = Message()
+    msg.type = changed_config
+    msg.is_on = is_on
+    Config.client.send(json.dumps(msg.__dict__).encode('utf-8'))
+
+# return the similarity between two string based on their common chars
 def get_similarity(a, b):
     s = list(set(a) & set(b))
     return len(s) / (len(a) + len(b))
 
-
+# return the most similar command instead of main input string
 def correct_input(inp):
     if Config.keyboard:
         return inp, 1
@@ -38,9 +46,12 @@ def correct_input(inp):
 def check_for_speech_recognition_enabling(text):
     if "صدا روشن" == text:
         Config.speech_recognition = True
+        announce_config_change("change voice", True)
+
         logging.info("speech recognition is activated")
     if "صدا خاموش" == text:
         Config.speech_recognition = False
+        announce_config_change("change voice", False)
         logging.info("speech recognition is deactivated")
 
 
@@ -76,14 +87,18 @@ def check_for_speech_commands(text):
     # Activating / Deactivating the Mouse
     if "موس روشن" == text:
         Config.mouse = True
+        announce_config_change("change mouse", True)
     if "موس خاموش" == text:
         Config.mouse = False
+        announce_config_change("change mouse", False)
 
     # Activating / Deactivating the blink detector
     if "چشمک روشن" == text:
         Config.blink = True
+        announce_config_change("change blink", True)
     if "چشمک خاموش" == text:
         Config.blink = False
+        announce_config_change("change blink", False)
 
 
 def check_for_system_commands(text):
@@ -99,8 +114,9 @@ def check_for_system_commands(text):
 
 
 def check_for_keyboard_commands(text):
-    if "کیبورد خاموش" ==  text:
+    if "کیبورد خاموش" == text:
         Config.keyboard = False
+        announce_config_change("change keyboard", False)
 
     if Config.keyboard:
         msg = Message()
@@ -111,6 +127,8 @@ def check_for_keyboard_commands(text):
 
     if "کیبورد روشن" == text:
         Config.keyboard = True
+        announce_config_change("change keyboard", True)
+
 
 # This Function checks if the given text is activating the voice assistant
 # If the voice assistant is enabled, then the given text will be interpreted
@@ -153,6 +171,7 @@ def start_recognizer():
     # The program should be continued for ever
     while True:
         pass
+
 
 # Start Speech Recognition
 def main():
