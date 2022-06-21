@@ -8,7 +8,7 @@ from network import main as network_main
 threading.Thread(target=speech_main).start()
 
 # Start Video Capturing
-threading.Thread(target=video_main).start()
+# threading.Thread(target=video_main).start()
 
 # Start Connecting to server
-threading.Thread(target=network_main).start()
+# threading.Thread(target=network_main).start()

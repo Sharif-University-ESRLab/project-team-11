@@ -11,6 +11,29 @@ r = sr.Recognizer()
 r.energy_threshold = 3000
 source = sr.Microphone()
 
+def get_similarity(a, b):
+    s = list(set(a) & set(b))
+    return len(s) / (len(a) + len(b))
+
+
+def correct_input(inp):
+    if Config.keyboard:
+        return inp
+    commands = ["صدا روشن", "صدا خاموش", "کلیک راست", "کلیک چپ", "کلیک جفت", "موس روشن", "موس خاموش",
+                "چشمک روشن", "چشمک خاموش", "راه اندازی مجدد", "خاموش", "کیبورد روشن", "کیبورد خاموش"]
+
+    best_match = ""
+    best_score = 0
+
+    for cmd in commands:
+        score = get_similarity(cmd, inp)
+        if score > best_score:
+            best_match = cmd
+            best_score = score
+
+    return best_match, best_score
+
+
 # Check if the given text is activating/deactivating the voice assistant
 def check_for_speech_recognition_enabling(text):
     if "صدا روشن" == text:
@@ -108,9 +131,13 @@ def callback(recognizer, audio):
         print('Start processing:')
         text = recognizer.recognize_google(audio, language='fa')
 
+        text, similarity = correct_input(text)
+
         print(text)
         print('------------------')
-        interpret_text(text)
+
+        if similarity > 0.3:
+            interpret_text(text)
 
     except sr.UnknownValueError:
         print("Oops! Didn't catch that")
