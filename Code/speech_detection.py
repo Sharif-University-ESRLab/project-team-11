@@ -130,10 +130,11 @@ def callback(recognizer, audio):
         print('The audio has been received.')
         print('Start processing:')
         text = recognizer.recognize_google(audio, language='fa')
+        print(f"initial text is : {text}")
 
         text, similarity = correct_input(text)
+        print(f"improved text :{text}")
 
-        print(text)
         print('------------------')
 
         if similarity > 0.3:
@@ -144,6 +145,8 @@ def callback(recognizer, audio):
 
 
 def start_recognizer():
+    print("The microphone is working")
+
     # Initialize a listener which activates when a user speaks
     r.listen_in_background(source, callback)
 

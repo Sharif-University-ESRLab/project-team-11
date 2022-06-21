@@ -77,13 +77,15 @@ def read():
             kb.write(msg.typed_text)
 
 # Specify the connection settings
-host = '127.0.0.1'
+host = '172.20.10.7'
 port = 8550
 
 # Connect to a client
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind((host, port))
 server.listen(1)
+
+print("The server is waiting ...")
 
 client, address = server.accept()
 print(f"connected with{address}")

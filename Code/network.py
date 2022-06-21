@@ -15,7 +15,7 @@ def read_message(client: socket.socket):
     return msg
 
 
-# Receive a message from a server
+# Receive a message from a server/
 def read():
     while True:
         # try:
@@ -35,12 +35,16 @@ def read():
 
 def main():
     # Specify the connection config
-    host = '127.0.0.1'
+    host = '172.20.10.7'
     port = 8550
+
+    print("The client is searching ...")
 
     # Create a socket, and connect to server
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client.connect((host, port))
+
+    print("The client is connected.")
 
     Config.client = client
 
