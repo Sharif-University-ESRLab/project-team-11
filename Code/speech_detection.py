@@ -18,7 +18,7 @@ def get_similarity(a, b):
 
 def correct_input(inp):
     if Config.keyboard:
-        return inp
+        return inp, 1
     commands = ["صدا روشن", "صدا خاموش", "کلیک راست", "کلیک چپ", "کلیک جفت", "موس روشن", "موس خاموش",
                 "چشمک روشن", "چشمک خاموش", "راه اندازی مجدد", "خاموش", "کیبورد روشن", "کیبورد خاموش"]
 
