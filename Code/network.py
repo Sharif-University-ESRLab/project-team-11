@@ -3,6 +3,8 @@ import json
 from message import Message
 from config import Config
 
+
+
 #send a message to server in order to show some config is changed
 def announce_config_change(changed_config, is_on):
     print('from announce:', changed_config, is_on)
@@ -49,13 +51,12 @@ def main():
 
     f = open("server-config.txt", "r")
     lines = f.readlines()
-    host_address = lines[0]
+    host_address = lines[0].split('\t')[1].strip()
+    f.close()
 
-    print(host_address)
-    host = '192.168.9.109'
     host = host_address
     port = 8550
-
+    print(f"server address to connect is: {host}:{port}")
     print("The client is searching ...")
 
     # Create a socket, and connect to server
