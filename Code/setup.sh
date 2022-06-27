@@ -1,8 +1,3 @@
-trap "killall background" SIGINT
-
-
-./venv/bin/python3 server.py&
-
 hostname="$(hostname).local"
 command="\
 	cd ~/Desktop/ESRLab_project-team-11/Code/; \
