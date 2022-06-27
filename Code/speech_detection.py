@@ -2,6 +2,7 @@ import logging
 import speech_recognition as sr
 import json, pyaudio, wave, os
 from config import Config
+from datetime import datetime
 
 from message import Message
 
@@ -147,8 +148,13 @@ def callback(recognizer, audio):
         print('------------------')
         print('The audio has been received.')
         print('Start processing:')
+
+        start_time = datetime.now()
         text = recognizer.recognize_google(audio, language='fa')
-        print(f"initial text is : {text}")
+        end_time = datetime.now()
+        time_interval = end_time - start_time
+
+        print(f"feteched initial text {text} in {time_interval} seconds")
 
         text, similarity = correct_input(text)
         print(f"improved text :{text}")
