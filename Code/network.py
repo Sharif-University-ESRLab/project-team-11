@@ -46,7 +46,14 @@ def read():
 
 def main():
     # Specify the connection config
+    f = open("server-config.txt", "r")
+    lines = f.readlines()
+    host_address = lines[0]
+
+    print(host_address)
     host = '192.168.9.109'
+    host = host_address
+
     port = 8550
 
     print("The client is searching ...")

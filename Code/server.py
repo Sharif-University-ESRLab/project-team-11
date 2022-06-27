@@ -128,7 +128,7 @@ def read():
 server_config = ServerConfig()
 
 # Specify the connection settings
-host = '192.168.9.109'
+host = '0.0.0.0'
 port = 8550
 
 # Connect to a client
