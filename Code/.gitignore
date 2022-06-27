@@ -1,6 +1,6 @@
 .idea/*
 venv/*
 __pycache__/*
-server-config.txt
+server_address.txt
 speech.log
 

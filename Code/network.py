@@ -49,7 +49,7 @@ def read():
 def main():
     # Specify the connection config
 
-    f = open("server-config.txt", "r")
+    f = open("server_address.txt", "r")
     lines = f.readlines()
     host_address = lines[0].split('\t')[1].strip()
     f.close()
